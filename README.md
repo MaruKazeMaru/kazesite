@@ -1,0 +1,2 @@
+# kazesite
+django web site

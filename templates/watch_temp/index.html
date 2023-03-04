@@ -1,0 +1,56 @@
+{% extends "watch_temp/base.html" %}
+
+{% block content %}
+
+<style>
+div{
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+
+<div>
+	<div class="mx-auto my-2 p-1 border border-dark rounded" style="width: 85%">
+		<div>
+			バイトで作ったwebシステムの一部を再現したサイトです。<br>
+			設計～テストのほとんどの作業に参加しました。<br>
+			著作権等の問題がありそうな部分は変更しています。
+		</div>
+		<div>
+			<button
+				type="button"
+				class="btn btn-outline-dark py-0 px-1"
+				data-toggle="collapse"
+				data-target="#collapseAboutSystem"
+				aria-expanded="false"
+				aria-controls="collapseAboutSystem"
+			>元になったシステムの概要</button>
+		</div>
+		<div class="ml-2 p-1 collapse border-start border-dark" id="collapseAboutSystem">
+			コンクリートは固まる際、水と化学反応して熱を発します。この反応熱を監視するシステムです。<br>
+			構成は以下の通りです。
+			<ul class="m-0">
+				<li>webサーバ</li>
+				<li>データベースサーバ</li>
+				<li>温度計との通信設定済みPC(以下、温度受信PC)からデータベースへ温度等を送信するモジュール</li>
+			</ul>
+			反応熱の監視方法は以下の通りです。
+			<ol class="m-0">
+				<li>作業員がwebブラウザから温度計の設置カ所をデータベースに登録する。</li>
+				<li>温度計を設置する。</li>
+				<li>温度計が温度受信PCに計測データを送信する。</li>
+				<li>温度受信PCが計測データをデータベースに送信する。</li>
+				<li>作業員がwebブラウザから反応熱推移を確認する。</li>
+			</ol>
+			詳細は下のリンクからご覧になれます。<br>
+			<a href="{% url 'watch_temp:about_original_system' %}">{% url "watch_temp:about_original_system" %}</a>
+		</div>
+	</div>
+</div>
+
+<div class="text-center">
+	<button class="btn btn-outline-dark">案件一覧</button>
+	<button class="btn btn-outline-dark">温度計一覧</button>
+</div>
+
+{% endblock %}

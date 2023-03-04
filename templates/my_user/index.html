@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<a>
+	hello
+	{% if user.is_authenticated %}
+	&ensp;
+	{{ user.username }}
+	{% endif %}
+</a><br>
+{% if user.is_authenticated %}
+{% else %}
+<button onclick="location.href='{% url 'my_user:login' %}'">ログイン</button>
+{% endif %}
+{% endblock %}

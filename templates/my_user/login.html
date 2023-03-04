@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="text-align: center">
+	<form action="{% url 'my_user:login' %}" method="POST">
+		{% csrf_token %}
+<!--		{{ form.as_p }} -->
+
+		<label>メールアドレス</label><br>
+		<input type="text" name="username"><br>
+		<label>パスワード</label><br>
+		<input type="password" name="password"><br>
+		<input type="hidden" name="next" value="{{ next }}">
+		<input type="submit" value="login">
+	</form>
+</div>
+{% endblock %}

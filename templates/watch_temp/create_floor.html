@@ -1,0 +1,17 @@
+{% extends "watch_temp/base.html" %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+<!--
+	set new image:<input type="checkbox" name="set_new_image"><br>
+	image id:<input type="number" min="1" max="{{ project.floor_count }}" step="1" value="1" name="image_id"><br>
+	image:<input type="file" name="new_image"><br>
+	name:<input type="text" name="name"><br>
+	comment:<br>
+	<textarea name="comment" rows="8" cols="32"></textarea><br>
+-->
+	{{ form.as_p }}
+	<input type="submit" class="btn" name="登録">
+</form>
+{% endblock %}

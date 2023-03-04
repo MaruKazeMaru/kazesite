@@ -1,0 +1,12 @@
+{% extends "watch_temp/base.html" %}
+
+{% block content %}
+<h3>エラーが発生しました！</h3>
+{% if error_messages %}
+<ul>
+	{% for err_msg in error_messages %}
+	<li>{{ err_msg|safe }}</li>
+	{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

@@ -8,3 +8,4 @@ media
 migrations
 .env
 local_settings.py
+global_settings.py

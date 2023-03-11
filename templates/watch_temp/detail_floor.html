@@ -2,6 +2,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="/static/watch_temp/style.css">
+<script src="/static/watch_temp/show_thermometers.js"></script>
 
 <div class="mx-auto" style="width: 95%">
 
@@ -40,8 +41,31 @@
 			<b>図面と温度計の位置</b>
 		</div>
 
-		<div class="col-10 info-c-t text-center">
+		<div class="col-10 info-c-t text-center" style="padding: calc(0.5rem + 25px)">
 			<img id="floor_image" style="max-width: 500px; max-height: 200px" src="/media/{{ floor.image }}">
+		</div>
+
+		{% for t in thermometers %}
+		<div id="thermometers_parent" style="position: relative; height: 0px; width: 0px">
+			<div class="thermometer" data-pos-x="{{ t.pos_x }}" data-pos-y="{{ t.pos_y }}">
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<div class="row info-r-m">
+		<div class="col-2 info-c-m">
+			<div class="info-c-sub text-center">
+				<b>温度計一覧</b>
+			</div>
+		</div>
+
+		<div class="col-10 info-c" style="border-top: solid 1.5px; border-bottom: 0px">
+			<ul class="m-0">
+				{% for t in thermometers %}
+				<li>{{ t.index }}:{{ t.serial }}</li>
+				{% endfor %}
+			</ul>
 		</div>
 	</div>
 
@@ -68,5 +92,23 @@
 	</div>
 
 </div>
+
+<script>
+window.addEventListener(
+	'load',
+	function(){
+		const floor = document.getElementById('floor_image');
+		const thermometersParent = document.getElementById('thermometers_parent');
+		setThermometersPos(floor, thermometersParent);
+		floor.onresize = function(){
+			setThermometersPos(floor, thermometersParent);
+		};
+		window.onresize = function(){
+			setThermometersPos(floor, thermometersParent);
+		};
+	},
+	false
+)
+</script>
 
 {% endblock %}

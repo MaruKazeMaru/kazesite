@@ -52,8 +52,8 @@ function startMoveThermometers(floor, thermometersParent){
 					inputUsing.value = 'True';
 					var inputPosX = document.getElementsByName(t.dataset.serial + '_posx')[0];
 					var inputPosY = document.getElementsByName(t.dataset.serial + '_posy')[0];
-					inputPosX.value = String(( x - fRect.left)   / fRect.width);
-					inputPosY.value = String((-y + fRect.bottom) / fRect.height);
+					inputPosX.value = String((x - fRect.left) / fRect.width);
+					inputPosY.value = String((y - fRect.top)  / fRect.height);
 				}
 				else{
 					inputUsing.value = 'False';

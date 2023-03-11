@@ -1,7 +1,9 @@
 .thermometer{
 	width: 50px;
-	height: 70px;
+	height: 50px;
 	position: absolute;
+	background-image: url('/static/watch_temp/thermometer_icon.png');
+	background-size: cover;
 }
 
 .building{

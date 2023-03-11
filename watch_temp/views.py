@@ -146,6 +146,21 @@ class DetailFloor(mixins.MyLoginRequiredMixin, DetailView):
 	template_name = "watch_temp/detail_floor.html"
 	model = models.Floor
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		thermometers = models.Thermometer.objects.filter(floor=context['floor'])
+		ts = []
+		for (i, thermometer) in enumerate(thermometers):
+			ts.append({
+				'index': i + 1,
+				'id': thermometer.id,
+				'serial': thermometer.serial,
+				'pos_x': thermometer.pos_x,
+				'pos_y': thermometer.pos_y,
+			})
+		context['thermometers'] = ts
+		return context
+
 
 class DetailThermometer(mixins.MyLoginRequiredMixin, DetailView):
 	template_name = "watch_temp/detail_thermometer.html"

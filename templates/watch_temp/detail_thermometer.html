@@ -1,0 +1,27 @@
+{% extends "watch_temp/base.html" %}
+
+{% block content %}
+<div>
+	<a>名前:</a>
+	<a>{{ thermometer.name }}</a>
+</div>
+
+<div>
+	<a>シリアル番号:</a>
+	<a>{{ thermometer.serial }}</a>
+</div>
+
+<div>
+	<a>コメント:</a>
+	<a>{{ thermometer.comment }}</a>
+</div>
+
+<div>
+	<a>使用状況:</a>
+	{% if thermometer.floor %}
+	<a>using</a>
+	{% else %}
+	<a>not using</a>
+	{% endif %}
+</div>
+{% endblock %}

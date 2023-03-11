@@ -1,0 +1,56 @@
+{% extends "watch_temp/base.html" %}
+
+{% block content %}
+<script src="/static/watch_temp/move_thermometer_icon.js"></script>
+<link rel="stylesheet" href="/static/watch_temp/style.css">
+
+<div class="text-center">
+	<img id="floor_image" style="max-width: 100%; max-height: 300px" src="/media/{{ floor.image }}">
+</div>
+
+<form method="POST">
+	{% csrf_token %}
+
+	<div id="thermometers_parent" style="position: relative">
+
+	{% for t in thermometers %}
+		<div class="thermometer" data-serial="{{ t.serial }}">
+			<a>serial:{{ t.serial }}</a>
+			<a>name:{{ t.name }}</a>
+			<a>comment:{{ t.comment }}</a>
+			{% if t.using %}
+			<a>pos\lnsp;x:{{ t.posx }}</a>
+			<a>pos\lnsp;y:{{ t.posy }}</a>
+			{% else %}
+			<a>not using</a>
+			{% endif %}
+		</div>
+
+		<input type="hidden" id="input_{{ t.serial }}_using" name="{{ t.serial }}_using" value="False">
+		<input type="hidden" id="input_{{ t.serial }}_posx" name="{{ t.serial }}_posx" value="0">
+		<input type="hidden" id="input_{{ t.serial }}_posy" name="{{ t.serial }}_posy" value="0">
+	{% endfor %}
+
+	</div>
+	<input type="submit" class="btn btn-primary" name="登録">
+</form>
+
+<script>
+window.addEventListener(
+	'load',
+	function(){
+		const thermometersParent = document.getElementById('thermometers_parent');
+		const floor = document.getElementById('floor_image');
+		initThermometers(thermometersParent);
+		startMoveThermometers(floor, thermometersParent);
+	},
+	false
+)
+
+window.addEventListener(
+	'resize',
+	initThermometers(document.getElementById('thermometers_parent'))
+)
+</script>
+
+{% endblock %}

@@ -11,3 +11,4 @@ local_settings.py
 global_settings.py
 mailmemo.py
 *.swp
+test_dir/

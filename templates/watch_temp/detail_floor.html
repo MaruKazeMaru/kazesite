@@ -1,9 +1,72 @@
 {% extends "watch_temp/base.html" %}
 
 {% block content %}
-name:{{ object.name }}
-comment:{{ object.comment }}
-floor:{{ object.floor }}階
-image:<br>
+<link rel="stylesheet" href="/static/watch_temp/style.css">
+
+<div class="mx-auto" style="width: 95%">
+
+	<div class="row info-r-t">
+		<div class="col-2 info-c text-center">
+			<b>建物名</b>
+		</div>
+
+		<div class="col-10 info-c">
+			{{ floor.building.name }}
+		</div>
+	</div>
+
+	<div class="row info-r-m">
+		<div class="col-2 info-c text-center">
+			<b>階</b>
+		</div>
+
+		<div class="col-10 info-c">
+			{{ floor.floor }}F
+		</div>
+	</div>
+
+	<div class="row info-r-m">
+		<div class="col-2 info-c text-center">
+			<b>温度</b>
+		</div>
+
+		<div class="col-10 info-c">
+			<canvas class="w-100" width="1800" height="600"></canvas>
+		</div>
+	</div>
+
+	<div class="row info-r-m">
+		<div class="col-2 info-c-t text-center">
+			<b>図面と温度計の位置</b>
+		</div>
+
+		<div class="col-10 info-c-t text-center">
+			<img id="floor_image" style="max-width: 500px; max-height: 200px" src="/media/{{ floor.image }}">
+		</div>
+	</div>
+
+	<div class="row info-r-m">
+		<div class="col-2 info-c-b">
+			<div class="info-c-sub text-center">
+				<b>図面</b>
+			</div>
+		</div>
+
+		<div class="col-10 info-c" style="border-top: solid 1.5px">
+			<a href="/media/{{ floor.image }}" target="_blank">ここ</a>をクリックすると別タブで図面画像を開きます。
+		</div>
+	</div>
+
+	<div class="row info-r-b">
+		<div class="col-2 info-c text-center">
+			<b>備考</b>
+		</div>
+
+		<div class="col-10 info-c">
+			{{ floor.comment }}
+		</div>
+	</div>
+
+</div>
 
 {% endblock %}

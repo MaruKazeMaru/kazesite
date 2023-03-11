@@ -1,22 +1,53 @@
 {% extends "watch_temp/base.html" %}
 
 {% block content %}
-<div class="row">
-	<div class="col-1"></div>
+<link rel="stylesheet" href="/static/watch_temp/style.css">
 
-	<div class="col-3">
-		<div class="py-auto">
-			<a></a>
+<div class="mx-auto" style="width: 450px">
+	<div class="row info-r-t">
+		<div class="col-3 info-c text-center">
+			<b>建物名</b>
+		</div>
+
+		<div class="col-9 info-c">
+			{{ building.name }}
 		</div>
 	</div>
 
-	<div class="col-5"></div>
+	<div class="row info-r-m">
+		<div class="col-3 info-c text-center">
+			<b>フロア一覧</b>
+		</div>
 
-	<div class="col-2"></div>
+		<div class="col-9 info-c">
+			<div class="building m-auto">
+				{% for f in floors %}
+				<div class="building-floor">
+					{% if f.id %}
+					<a href="{% url 'watch_temp:detail_floor' pk=f.id %}">{{ f.floor }}F</a>
+					{% else %}
+					<a>{{ f.floor }}F</a>
+					{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 
-	<div class="col-1"></div>
+	<div class="row info-r-b">
+		<div class="col-3 info-c text-center">
+			<b>備考</b>
+		</div>
+
+		<div class="col-9 info-c">
+			<div class="text-left">
+				{% if building.comment %}
+				<a>{{ building.comment }}</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
 </div>
-name:{{ building.name }}<br>
-floor count:{{ building.floor_count }}<br>
-comment:{{ building.comment }}
+
 {% endblock %}

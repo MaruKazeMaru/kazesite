@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import CreateView
 from django.urls import reverse
@@ -67,11 +67,86 @@ class CreateFloor(mixins.MyLoginRequiredMixin, CreateView):
 		return reverse("watch_temp:detail_floor", kwargs={"pk": self.object.id})
 
 
+class SetThermometerPos(mixins.MyLoginRequiredMixin, TemplateView):
+	template_name = "watch_temp/set_thermometer_pos.html"
+	def post(self, request, *args, **kwargs):
+		floor = get_object_or_404(models.Floor, id=kwargs['floor_id'])
+
+		ls = {} # {シリアル番号 : {'using': 使用中か, 'pos_x': x座標, 'pos_y': y座標}}
+		for key in request.POST:
+			ss = key.split('_')
+			if len(ss) == 2:
+				if not ss[0] in ls: #if serial is not in 
+					ls[ss[0]] = {'using': False, 'posx': 0, 'posy': 0}
+				if ss[1] == 'using':
+					ls[ss[0]]['using'] = bool(request.POST[key])
+				if ss[1] == 'posx':
+					ls[ss[0]]['posx'] = float(request.POST[key])
+				if ss[1] == 'posy':
+					ls[ss[0]]['posy'] = float(request.POST[key])
+		for serial in ls:
+			try:
+				t = models.Thermometer.objects.get(serial=serial)
+			except: pass
+			else:
+				if ls[serial]['using']:
+					t.floor = floor
+					t.pos_x = ls[serial]['posx']
+					t.pos_y = ls[serial]['posy']
+					t.save()
+				else:
+					t.floor = None
+					t.save()
+		return redirect('watch_temp:index')
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		floor = get_object_or_404(models.Floor, id=kwargs['floor_id'])
+		context['floor'] = floor
+		#どこにも配置されていない温度計(の名前、使用中か)をcontextに追加
+		thermometers = models.Thermometer.objects.filter(floor=None)
+		ts = []
+		for t in thermometers:
+			ts.append({'serial': t.serial, 'name': t.name, 'using': False})
+		#当該フロアに配置されている温度計(の名前、使用中か、位置)をcontextに追加
+		thermometers = models.Thermometer.objects.filter(floor=floor)
+		for t in thermometers:
+			ts.append({'serial': t.serial, 'name': t.name, 'using': True, 'posx': t.pos_x, 'posy': t.pos_y})
+		context['thermometers'] = ts
+		return context
+
+
+class CreateThermometer(mixins.MyLoginRequiredMixin, CreateView):
+	template_name = "watch_temp/create_thermometer.html"
+	model = models.Thermometer
+	fields = ['name', 'serial', 'comment']
+	def get_success_url(self):
+		return reverse("watch_temp:detail_thermometer", kwargs={'pk': self.object.id})
+
+
 class DetailBuilding(mixins.MyLoginRequiredMixin, DetailView):
 	template_name = "watch_temp/detail_building.html"
 	model = models.Building
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data()
+		building = context['building']
+		fs = [{'floor': i+1, 'id': None} for i in range(building.floor_count)]
+		floors = models.Floor.objects.filter(building=building)
+		for floor in floors:
+			try:
+				fs[floor.floor - 1]['id'] = floor.id
+			except IndexError: pass
+		fs.reverse()
+		context['floors'] = fs
+		return context
 
 
 class DetailFloor(mixins.MyLoginRequiredMixin, DetailView):
 	template_name = "watch_temp/detail_floor.html"
 	model = models.Floor
+
+
+class DetailThermometer(mixins.MyLoginRequiredMixin, DetailView):
+	template_name = "watch_temp/detail_thermometer.html"
+	model = models.Thermometer

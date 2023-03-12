@@ -1,7 +1,47 @@
 {% extends "base.html" %}
 {% block header %}
 
-<div style="margin: 0px; padding: 0px; background-color: #99FFFF">
-	<h1 style="margin: 0px; padding: 10px">温度監視</h1>
+<div class="m-0 px-2 py-1" style="background-color: #99FFFF">
+	<a style="font-size: 2.5rem; cursor: pointer"><b>温度監視</b></a>
 </div>
+
+<div class="mybreadcrumb">
+	<ol>
+		<li><a href="{% url 'watch_temp:index' %}">トップ</a></li>
+		<li>今</li>
+	</ol>
+</div>
+
+<style>
+.mybreadcrumb{
+	padding: 0rem 1rem;
+	background-color: lightgray;
+}
+
+.mybreadcrumb ol{
+	display: flex;
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.mybreadcrumb ol li{
+	font-size: 1.2rem;
+	margin: 0.2rem 0.5rem 0.2rem 0rem;
+}
+
+.mybreadcrumb ol li a{
+	text-decoration: none;
+}
+
+.mybreadcrumb ol li:first-child:before{
+	content: none;
+}
+
+.mybreadcrumb ol li:before{
+	content: "＞";
+	margin-right: 0.5rem;
+}
+</style>
+
 {% endblock %}

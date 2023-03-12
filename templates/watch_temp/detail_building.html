@@ -3,7 +3,11 @@
 {% block content %}
 <link rel="stylesheet" href="/static/watch_temp/style.css">
 
-<div class="mx-auto" style="width: 450px">
+<div class="info-title" style="width: 10rem">
+	<b>建物詳細</b>
+</div>
+
+<div class="mx-auto" style="width: 90%; max-width: 500px">
 	<div class="row info-r-t">
 		<div class="col-3 info-c text-center">
 			<b>建物名</b>
@@ -22,11 +26,31 @@
 		<div class="col-9 info-c">
 			<div class="building m-auto">
 				{% for f in floors %}
-				<div class="building-floor">
+				<div
+					class="building-floor"
+					style="cursor: pointer"
+					data-toggle="collapse"
+					data-target="#collapse{{ f.floor }}F"
+					aria-expanded="false"
+					aria-controls="collapse{{ f.floor }}F"
+				>
+					{{ f.floor }}F
+				</div>
+				<div class="building-floor-detail collapse" id="collapse{{ f.floor }}F">
 					{% if f.id %}
-					<a href="{% url 'watch_temp:detail_floor' pk=f.id %}">{{ f.floor }}F</a>
+					<img src="/media/{{ f.image }}">
+					<button
+						class="btn btn-outline-dark m-auto"
+						onclick="location.href='{% url 'watch_temp:detail_floor' pk=f.id %}'"
+					>詳細</button>
+					<button
+						class="btn btn-outline-dark"
+					>修正</button>
 					{% else %}
-					<a>{{ f.floor }}F</a>
+					<button
+						class="btn btn-outline-dark m-auto"
+						onclick="location.href='{% url 'watch_temp:create_floor' building_id=building.id floor=f.floor %}'"
+					>登録</button>
 					{% endif %}
 				</div>
 				{% endfor %}

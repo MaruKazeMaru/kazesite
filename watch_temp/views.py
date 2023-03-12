@@ -131,11 +131,12 @@ class DetailBuilding(mixins.MyLoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data()
 		building = context['building']
-		fs = [{'floor': i+1, 'id': None} for i in range(building.floor_count)]
+		fs = [{'floor': i+1} for i in range(building.floor_count)]
 		floors = models.Floor.objects.filter(building=building)
 		for floor in floors:
 			try:
 				fs[floor.floor - 1]['id'] = floor.id
+				fs[floor.floor - 1]['image'] = floor.image
 			except IndexError: pass
 		fs.reverse()
 		context['floors'] = fs

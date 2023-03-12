@@ -15,6 +15,35 @@
 	text-align: center;
 	border: solid 1px black;
 	padding: 0.2rem;
+	cursor: pointer;
+}
+
+.building-floor-detail{
+	padding: 0.4rem;
+	text-align: center;
+	border-bottom: solid 1px black;
+}
+
+.building-floor-detail img{
+	width: 65%;
+	padding: 0.4rem;
+	padding-top: 0px;
+}
+
+.building-floor-detail button{
+	width: 47%;
+	padding: 0.2rem 0.4rem;
+}
+
+.info-title{
+	margin: 1rem auto 0px auto;
+	padding: 0px;
+	border-top: solid 1.5px black;
+	border-left: solid 1.5px black;
+	border-right: solid 1.5px black;
+	border-radius: 0.5rem 0.5rem 0% 0%;
+	text-align: center;
+	font-size: 2rem;
 }
 
 .info-r-t{
@@ -75,4 +104,8 @@
 	padding: 0.5rem;
 	border-left: solid 1.5px black;
 	border-top: solid 1.5px black;
+}
+
+.thermometer-detail{
+	
 }

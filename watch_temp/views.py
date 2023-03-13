@@ -1,27 +1,86 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import CreateView
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from . import models, mixins, forms
+from .title_of_url import get_title, get_breadcrumb
 
-class Index(mixins.MyLoginRequiredMixin, TemplateView):
+class Index(mixins.CanAccessAppMixin, TemplateView):
 	template_name = "watch_temp/index.html"
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [get_breadcrumb('index', no_url=True)]
+		return context
 
 
-class AboutOriginalSystem(mixins.MyLoginRequiredMixin, TemplateView):
+class AboutOriginalSystem(mixins.CanAccessAppMixin, TemplateView):
 	template_name = "watch_temp/about_original_system.html"
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('about_original_system', no_url=True),
+		]
+		return context
 
 
-class CreateBuilding(mixins.MyLoginRequiredMixin, CreateView):
+# 建物関連
+class ListBuilding(mixins.CanAccessAppMixin, ListView):
+	template_name = "watch_temp/list_building.html"
+	model = models.Building
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_building', no_url=True),
+		]
+		return context
+
+
+class CreateBuilding(mixins.CanAccessAppMixin, CreateView):
 	template_name = "watch_temp/create_building.html"
 	model = models.Building
 	fields = ['name', 'floor_count', 'comment']
 	def get_success_url(self):
 		return reverse("watch_temp:detail_building", kwargs={"pk": self.object.id})
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_building'),
+			get_breadcrumb('create_building', no_url=True),
+		]
+		return context
 
-class CreateFloor(mixins.MyLoginRequiredMixin, CreateView):
+
+class DetailBuilding(mixins.CanAccessAppMixin, DetailView):
+	template_name = "watch_temp/detail_building.html"
+	model = models.Building
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data()
+		building = context['building']
+		fs = [{'floor': i+1} for i in range(building.floor_count)]
+		floors = models.Floor.objects.filter(building=building)
+		for floor in floors:
+			try:
+				fs[floor.floor - 1]['id'] = floor.id
+				fs[floor.floor - 1]['image'] = floor.image
+			except IndexError: pass
+		fs.reverse()
+		context['floors'] = fs
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_building'),
+			get_breadcrumb('detail_building', kwargs=kwargs, no_url=True),
+		]
+		return context
+
+
+# フロア関連
+class CreateFloor(mixins.CanAccessAppMixin, CreateView):
 	template_name = "watch_temp/create_floor.html"
 	model = models.Floor
 	fields = ['name', 'comment', 'image']
@@ -66,8 +125,17 @@ class CreateFloor(mixins.MyLoginRequiredMixin, CreateView):
 	def get_success_url(self):
 		return reverse("watch_temp:detail_floor", kwargs={"pk": self.object.id})
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_building'),
+			get_breadcrumb('detail_building', kwargs=kwargs, no_url=True),
+		]
+		return context
 
-class SetThermometerPos(mixins.MyLoginRequiredMixin, TemplateView):
+
+class SetThermometerPos(mixins.CanAccessAppMixin, TemplateView):
 	template_name = "watch_temp/set_thermometer_pos.html"
 	def post(self, request, *args, **kwargs):
 		floor = get_object_or_404(models.Floor, id=kwargs['floor_id'])
@@ -113,37 +181,18 @@ class SetThermometerPos(mixins.MyLoginRequiredMixin, TemplateView):
 		for t in thermometers:
 			ts.append({'serial': t.serial, 'name': t.name, 'using': True, 'posx': t.pos_x, 'posy': t.pos_y})
 		context['thermometers'] = ts
+
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_building'),
+			get_breadcrumb('detail_building', kwargs={'pk': floor.building_id}),
+			get_breadcrumb('set_thermometer_pos', kwargs={'floor': floor.floor}, no_url=True),
+		]
 		return context
 
 
-class CreateThermometer(mixins.MyLoginRequiredMixin, CreateView):
-	template_name = "watch_temp/create_thermometer.html"
-	model = models.Thermometer
-	fields = ['name', 'serial', 'comment']
-	def get_success_url(self):
-		return reverse("watch_temp:detail_thermometer", kwargs={'pk': self.object.id})
-
-
-class DetailBuilding(mixins.MyLoginRequiredMixin, DetailView):
-	template_name = "watch_temp/detail_building.html"
-	model = models.Building
-
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data()
-		building = context['building']
-		fs = [{'floor': i+1} for i in range(building.floor_count)]
-		floors = models.Floor.objects.filter(building=building)
-		for floor in floors:
-			try:
-				fs[floor.floor - 1]['id'] = floor.id
-				fs[floor.floor - 1]['image'] = floor.image
-			except IndexError: pass
-		fs.reverse()
-		context['floors'] = fs
-		return context
-
-
-class DetailFloor(mixins.MyLoginRequiredMixin, DetailView):
+class DetailFloor(mixins.CanAccessAppMixin, DetailView):
 	template_name = "watch_temp/detail_floor.html"
 	model = models.Floor
 
@@ -160,9 +209,47 @@ class DetailFloor(mixins.MyLoginRequiredMixin, DetailView):
 				'pos_y': thermometer.pos_y,
 			})
 		context['thermometers'] = ts
+		context['breadcrumbs'] = [
+		]
 		return context
 
 
-class DetailThermometer(mixins.MyLoginRequiredMixin, DetailView):
+# 温度計関連
+class ListThermometer(mixins.CanAccessAppMixin, ListView):
+	template_name = "watch_temp/list_thermometer.html"
+	model = models.Thermometer
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_thermometer', no_url=True),
+		]
+		return context
+
+
+class CreateThermometer(mixins.CanAccessAppMixin, CreateView):
+	template_name = "watch_temp/create_thermometer.html"
+	model = models.Thermometer
+	fields = ['name', 'serial', 'comment']
+	def get_success_url(self):
+		return reverse("watch_temp:detail_thermometer", kwargs={'pk': self.object.id})
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_thermometer'),
+			get_breadcrumb('create_thermometer', no_url=True),
+		]
+		return context
+
+
+class DetailThermometer(mixins.CanAccessAppMixin, DetailView):
 	template_name = "watch_temp/detail_thermometer.html"
 	model = models.Thermometer
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['breadcrumbs'] = [
+		]
+		return context

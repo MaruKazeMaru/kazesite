@@ -1,12 +1,13 @@
 from django.shortcuts import redirect
+from django.http import Http404
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-class MyLoginRequiredMixin(UserPassesTestMixin):
+class CanAccessAppMixin(UserPassesTestMixin):
 	def test_func(self):
-		return self.request.user.is_active
+		return self.request.user.can_access_watch_temp
 
 	def handle_no_permission(self):
-		return redirect('/login/?next=' + self.request.path)
+		raise Http404("")
 
 class SuperLoginRequiredMixin(UserPassesTestMixin):
 	def test_func(self):

@@ -7,8 +7,13 @@
 
 <div class="mybreadcrumb">
 	<ol>
-		<li><a href="{% url 'watch_temp:index' %}">トップ</a></li>
-		<li>今</li>
+		{% for b in breadcrumbs %}
+		{% if b.url %}
+		<li><a href="{{ b.url }}">{{ b.title }}</a></li>
+		{% else %}
+		<li>{{ b.title }}</li>
+		{% endif %}
+		{% endfor %}
 	</ol>
 </div>
 

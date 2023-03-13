@@ -20,6 +20,8 @@ class MyUserManager(BaseUserManager):
         user.is_superuser=True
         user.is_staff=True
         user.is_admin=True
+        user.can_access_watch_temp = True;
+        user.can_access_arrow_move = True;
         user.save(using=self._db)
         return user
 
@@ -32,6 +34,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
+
+    can_access_watch_temp = models.BooleanField(default=False)
+    can_access_arrow_move = models.BooleanField(default=False)
 
     objects = MyUserManager()
     USERNAME_FIELD = 'email'

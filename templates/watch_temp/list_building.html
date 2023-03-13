@@ -1,0 +1,78 @@
+{% extends "watch_temp/base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/watch_temp/style.css">
+
+<div class="info-title" style="width: 10rem">
+	<b>建物一覧</b>
+</div>
+
+<div class="info-r mx-auto" style="max-width: 300px">
+	<div class="m-0 p-0">
+		{% for b in building_list %}
+		<div class="info-c">
+			<div class="ml-2" style="font-size: 1.5rem">{{ b.name }}</div>
+			<div class="mr-2 pb-2" style="text-align: right">{{ b.floor_count }}階建て</div>
+			<div class="text-center w-100">
+				<button
+					class="btn btn-outline-dark py-0"
+					style="width: 32%"
+					onclick="location.href='{% url 'watch_temp:detail_building' pk=b.id %}'"
+				>詳細</button>
+				<button
+					class="btn btn-outline-dark py-0"
+					style="width: 32%"
+				>編集</button>
+				<button
+					class="btn btn-outline-dark py-0"
+					style="width: 32%"
+				>削除</button>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<div style="padding: 1rem; border: solid 1.5px black; margin: 0px auto; width: 60%; max-width: 500px">
+<table class="table" style="margin: 0px">
+	<thead>
+		<tr>
+			<th scope="col">建物名</th>
+			<th scope="col">階数</th>
+			<th scope="col">詳細</th>
+			<th scope="col">編集</th>
+			<th scope="col">削除</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for b in building_list %}
+		<tr>
+			<td>{{ b.name }}</td>
+			<td>{{ b.floor_count }}</td>
+			<td>
+				<button
+					class="btn btn-outline-dark"
+					style="padding:0.2rem 0.5rem"
+					onclick="location.href='{% url 'watch_temp:detail_building' pk=b.id %}'"
+				>&ensp;</button>
+			</td>
+			<td>
+				<button
+					class="btn btn-outline-dark"
+					style="padding:0.2rem 0.5rem"
+				>&ensp;</button>
+			</td>
+			<td>
+				<button
+					class="btn btn-outline-dark"
+					style="padding:0.2rem 0.5rem"
+				>&ensp;</button>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+
+{% endblock %}

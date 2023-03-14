@@ -4,6 +4,10 @@
 <link rel="stylesheet" href="/static/watch_temp/style.css">
 <script src="/static/watch_temp/show_thermometers.js"></script>
 
+<div class="info-title" style="width: 10rem">
+	<b>フロア詳細</b>
+</div>
+
 <div class="mx-auto" style="width: 95%">
 
 	<div class="row info-r-t">
@@ -38,7 +42,7 @@
 
 	<div class="row info-r-m">
 		<div class="col-2 info-c-t text-center">
-			<b>図面と温度計の位置</b>
+			<b>図面と温度計の配置</b>
 		</div>
 
 		<div class="col-10 info-c-t text-center" style="padding: calc(0.5rem + 25px)">
@@ -61,11 +65,48 @@
 		</div>
 
 		<div class="col-10 info-c" style="border-top: solid 1.5px; border-bottom: 0px">
+			<table>
+				<thead>
+					<tr>
+						<th>番号</th>
+						<th>通称</th>
+						<th>シリアル番号</th>
+						<th>詳細</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for t in thermometers %}
+					<tr>
+						<td>{{ forloop.counter }}</td>
+						<td>{{ t.name }}</td>
+						<td>{{ t.serial }}</td>
+						<td>
+							<button
+								class="btn btn-outline-dark edit-btn-simple"
+								onclick="location.href='{% url 'watch_temp:detail_thermometer' pk=t.id %}'"
+							><div style="background-image: url('/static/detail_icon.png')"></div></button>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			<div class="mt-2 mb-1 mr-3 text-right">
+				<button
+					class="btn btn-outline-dark edit-btn"
+					onclick="location.href='{% url 'watch_temp:set_thermometer_pos' floor_id=floor.id %}'"
+				>
+					<div style="background-image: url('/static/update_icon.png')"></div>
+					<a>配置を修正</a>
+				</button>
+			</div>
+<!--
 			<ul class="m-0">
 				{% for t in thermometers %}
 				<li>{{ t.index }}:{{ t.serial }}</li>
 				{% endfor %}
 			</ul>
+-->
 		</div>
 	</div>
 

@@ -6,29 +6,29 @@
 <link href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" rel="stylesheet">
 
 <div class="info-title" style="width: 10rem">
-	<b>建物一覧</b>
+	<b>温度計一覧</b>
 </div>
 
 <div class="table-parent" style="width: 60%; max-width: 500px">
 	<table>
 		<thead>
 			<tr>
-				<th>建物名</th>
-				<th>階数</th>
+				<th>通称</th>
+				<th>シリアル番号</th>
 				<th>詳細</th>
 				<th>編集</th>
 				<th>削除</th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for b in building_list %}
+			{% for t in thermometer_list %}
 			<tr>
-				<td>{{ b.name }}</td>
-				<td>{{ b.floor_count }}</td>
+				<td>{{ t.name }}</td>
+				<td>{{ t.serial }}</td>
 				<td>
 					<button
 						class="btn btn-outline-dark edit-btn-simple"
-						onclick="location.href='{% url 'watch_temp:detail_building' pk=b.id %}'"
+						onclick="location.href='{% url 'watch_temp:detail_thermometer' pk=t.id %}'"
 					><div style="background-image: url('/static/detail_icon.png')"></div></button>
 				</td>
 				<td>
@@ -49,7 +49,7 @@
 	<div class="my-2 mr-3 text-right">
 		<button
 			class="btn btn-outline-dark edit-btn"
-			onclick="location.href='{% url 'watch_temp:create_building' %}'"
+			onclick="location.href='{% url 'watch_temp:create_thermometer' %}'"
 		>
 			<div style="background-image: url('/static/create_icon.png')"></div>
 			<a><b>追加</b></a>

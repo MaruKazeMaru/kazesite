@@ -9,7 +9,11 @@ def get_title(url_name, kwargs=None):
 	elif url_name == 'list_building': return "建物一覧"
 	elif url_name == 'create_building': return "建物登録"
 	elif url_name == 'detail_building':
-		return "建物詳細:" + kwargs['object'].name
+		if 'object' in kwargs:
+			building = kwargs['object']
+		else:
+			building = get_object_or_404(models.Building, pk=kwargs['pk'])
+		return "建物詳細:" + building.name
 	elif url_name == 'delete_building':
 		building = get_object_or_404(models.Building, pk=kwargs['pk'])
 		return "建物情報削除:" + building.name

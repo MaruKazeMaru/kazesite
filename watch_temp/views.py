@@ -198,7 +198,8 @@ class DetailFloor(mixins.CanAccessAppMixin, DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		thermometers = models.Thermometer.objects.filter(floor=context['floor'])
+		floor = context['floor']
+		thermometers = models.Thermometer.objects.filter(floor=floor)
 		ts = []
 		for (i, thermometer) in enumerate(thermometers):
 			ts.append({
@@ -210,6 +211,10 @@ class DetailFloor(mixins.CanAccessAppMixin, DetailView):
 			})
 		context['thermometers'] = ts
 		context['breadcrumbs'] = [
+			get_breadcrumb('index'),
+			get_breadcrumb('list_building'),
+			get_breadcrumb('detail_building', kwargs={'pk': floor.building_id}),
+			get_breadcrumb('detail_floor', kwargs={'pk': floor.id }, no_url=True),
 		]
 		return context
 

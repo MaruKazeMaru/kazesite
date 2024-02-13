@@ -1,4 +1,7 @@
 allowed_hosts = ["*"]
 debug = True
-static_url = "static/"
-media_url = "media/"
+static_url = "/static/"
+static_root = "/static/"
+media_url = "/media/"
+media_root = "/media/"
+secret_key = "django-insecure-r!7i^)big^ht%%hx9+add%%4vnepgiju%w^)3evnon-48o19^1"

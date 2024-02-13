@@ -1,0 +1,4 @@
+allowed_hosts = ["*"]
+debug = True
+static_url = "static/"
+media_url = "media/"

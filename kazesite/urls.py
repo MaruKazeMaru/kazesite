@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('main.urls')),
+    path('wili/', include('wili.urls')),
     path('admin/', admin.site.urls),
 ]

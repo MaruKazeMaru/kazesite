@@ -1,14 +1,22 @@
 .titlebar{
-    background: linear-gradient(rgb(218, 218, 218), white);
+    background: linear-gradient(rgb(190, 190, 190), white);
 }
 
 .heading{
     padding: 1rem 2rem;
-    background: linear-gradient(170deg, rgb(218, 218, 218) 5%, white 25%); 
+    background: linear-gradient(170deg, rgb(190, 190, 190) 5%, white 25%); 
 }
 
 .heading>p{
     font-weight: 900;
     font-size: 2.5rem;
     margin: 0px;
+}
+
+.btn-main{
+    background-color: white;
+}
+
+.btn-main:hover{
+    background-color: rgb(210, 210, 210);
 }
